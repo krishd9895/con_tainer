@@ -4,14 +4,11 @@ FROM alpine:latest
 # Install curl
 RUN apk update && apk add --no-cache curl
 
-# Set the URL environment variable
-ENV URL $URL
+# Copy the script to the container
+COPY entrypoint.sh /entrypoint.sh
 
-# Download the tar file
-RUN curl -o kmltb_bot_image_backup.tar $URL
+# Set the script as executable
+RUN chmod +x /entrypoint.sh
 
-# Load the Docker image
-RUN docker load -i kmltb_bot_image_backup.tar
-
-# Run the container
-CMD ["docker", "run", "--name", "new_kmltb_bot_container", "-d", "kmltb_bot_image_backup"]
+# Run the script as the default command
+CMD ["/entrypoint.sh"]
